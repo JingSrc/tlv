@@ -1,2 +1,2 @@
 # tlv
-tlv encoder and decoder
+easy to use tlv (tag-length-value) encoder and decoder
