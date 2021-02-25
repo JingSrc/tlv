@@ -29,7 +29,7 @@ Field::Field(Field &&other)
 Field &Field::operator=(const Field &other)
 {
     if (this != &other) {
-        reset(other.tag(), other.size(), other.value());
+        reset(other.tag(), other.size(), other.data());
     }
 
     return *this;
@@ -55,7 +55,7 @@ Field::size_type Field::size() const
     return mData ? mData->size : 0;
 }
 
-const Field::value_type *Field::value() const
+const Field::value_type *Field::data() const
 {
     return mData ? mData->value : nullptr;
 }

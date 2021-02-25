@@ -67,10 +67,24 @@ public:
     }
 
     template <typename T> inline void emplace(Field::tag_type tag, const T &data) {
-        mFields.insert({tag, make_field(tag, data)});
+        if constexpr(std::is_same_v<const char *, T>) {
+            insert(std::make_shared<Field>(tag, Field::size_type(std::strlen(data)), data));
+        } else {
+            static_assert(!std::is_pointer_v<T>, "can not be a pointer");
+            insert(std::make_shared<Field>(tag, sizeof(data), &data));
+        }
     }
-    template <typename T, Field::size_type N> inline std::shared_ptr<Field> make_field(Field::tag_type tag, const T (&arr)[N]) {
-        mFields.insert({tag, make_field(tag, arr)});
+
+    template <> inline void emplace(Field::tag_type tag, const std::string &data) {
+        insert(std::make_shared<Field>(tag, Field::size_type(data.size()), data.data()));
+    }
+
+    template <typename T, Field::size_type N> inline void emplace(Field::tag_type tag, const T (&arr)[N]) {
+        if constexpr(std::is_same_v<T, char>) {
+            emplace(tag, reinterpret_cast<const char *>(arr));
+        } else {
+            insert(std::make_shared<Field>(tag, Field::size_type(N * sizeof(T)), &arr[0]));
+        }
     }
 
     inline iterator find(key_type tag) {

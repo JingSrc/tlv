@@ -32,7 +32,15 @@ public:
 
     tag_type tag() const;
     size_type size() const;
-    const value_type *value() const;
+    const value_type *data() const;
+
+    template <typename T> inline T value() {
+        if constexpr(std::is_pointer_v<T>) {
+            return reinterpret_cast<T>(data());
+        } else {
+            return *reinterpret_cast<const T *>(data());
+        }
+    }
 
     size_type capacity() const;
 
@@ -68,18 +76,6 @@ template <typename T, Field::size_type N> inline std::shared_ptr<Field> make_fie
     } else {
         return std::make_shared<Field>(tag, Field::size_type(N * sizeof(T)), &arr[0]);
     }
-}
-
-template <typename T> inline T get_field(const Field &field) {
-    if constexpr(std::is_pointer_v<T>) {
-        return reinterpret_cast<T>(field.value());
-    } else {
-        return *reinterpret_cast<const T *>(field.value());
-    }
-}
-
-template <typename T> inline T get_field(std::shared_ptr<Field> field) {
-    return get_field<T>(*field);
 }
 
 }

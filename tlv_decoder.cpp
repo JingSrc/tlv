@@ -14,7 +14,7 @@ tlv::byte *FieldEncoder::encode(const Field &field, byte *ptr, size_t len)
 
     auto tag = field.tag();
     auto size = endian_swap(field.size());
-    auto value = field.value();
+    auto value = field.data();
 
     std::memcpy(ptr, &tag, sizeof(tag));
     std::memcpy(ptr + sizeof(tag), &size, sizeof(size));
