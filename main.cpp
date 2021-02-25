@@ -4,7 +4,7 @@
 #include "tlv_struct.h"
 #include "tlv_decoder.h"
 
-int main(int argc, char *argv[])
+int main()
 {
     int i = 123456;
     const char *str1 = "12321";
