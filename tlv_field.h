@@ -60,12 +60,6 @@ template <typename T> inline std::shared_ptr<Field> make_field(Field::tag_type t
     }
 }
 
-//template <typename T> inline std::shared_ptr<Field> make_field(Field::tag_type tag, const T *data);
-
-//template <> inline std::shared_ptr<Field> make_field(Field::tag_type tag, const char *data) {
-//    return std::make_shared<Field>(tag, Field::size_type(std::strlen(data)), data);
-//}
-
 template <> inline std::shared_ptr<Field> make_field(Field::tag_type tag, const std::string &data) {
     return std::make_shared<Field>(tag, Field::size_type(data.size()), data.data());
 }
